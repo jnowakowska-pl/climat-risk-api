@@ -1,0 +1,7 @@
+{
+    "python": {
+      "singleQuote": true,
+      "trailingComma": "all",
+      "printWidth": 88
+    }
+  }
