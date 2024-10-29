@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email instead of username"""
-    user_id = models.AutoField(primary_key=True)
+
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
