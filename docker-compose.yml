@@ -1,6 +1,17 @@
 version: '3.9'
 
 services:
+  db:
+    image: postgres:13-alpine
+    container_name: climat-risk-api_postgres_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=GEODA
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
   app:
     build:
       context: .
@@ -11,27 +22,23 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
+      sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db
-      - DB_NAME=devdb
-      - DB_USER=devuser
-      - DB_PASS=devpass
+      - DB_NAME=GEODA
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_PORT=5432
     depends_on:
-      - db
+    - db
 
-  db:
-    image: postgres:13-alpine
-    volumes:
-      - dev_db_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=devdb
-      - POSTGRES_USER=devuser
-      - POSTGRES_PASSWORD=devpass
+  frontend:
+    build:
+      context: ./frontend  # Path to the React app directory
     ports:
-      - "54320:5432"
+      - "3000:80"  # Map port 80 in the container to port 3000 on the host
+
 
 volumes:
-  dev_db_data:
+  postgres_data:

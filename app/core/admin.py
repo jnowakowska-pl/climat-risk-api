@@ -7,7 +7,8 @@ from core import models
 
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users."""
-    order = ['id']
-    list_display = ['email', 'username']
+    ordering = ['user_id']
+    list_display = ['email', 'username', 'created_at']
+    list_filter = ['is_superuser', 'is_active']
 
-admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Users, UserAdmin)
