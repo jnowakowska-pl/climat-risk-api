@@ -24,20 +24,6 @@ docker load --input geoda_dev_db.tar
 docker images
 
 
-# start the container
-docker-compose up
-
-
-# connect to database inside the container (dbeaver)
-host: localhost
-port: 5432
-user: postgres
-pass: postgres
-
-# stop frontend to run frontend independently for dev purposes (npm run dev)
-docker-compose down frontend
-
-
 
 # ---------------------------
 # build service based on docker-compose.yaml
@@ -62,3 +48,29 @@ docker commit container_id new_image_name:tag
 
 # save image
 docker save --output image1.tar new_image_name:tag
+
+
+
+# --------------------------
+# run the app
+# --------------------------
+
+# start the container
+docker-compose up
+
+
+# connect to database inside the container (dbeaver)
+host: localhost
+port: 5432
+user: postgres
+pass: postgres
+
+# stop frontend to run frontend independently for dev purposes (npm run dev)
+docker-compose down frontend
+
+# run frontend independently
+./frontend npm run dev
+
+https://localhost:3000 (frontend service)
+https://localhost:8000 (backend service)
+https://localhost:8000/api/doc (backend swagger)
