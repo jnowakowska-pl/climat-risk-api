@@ -156,3 +156,7 @@ cython_debug/
 
 # django migrations
 core/migrations/*
+docker-images/climat-risk-api-backend.tar
+docker-images/docker-images.zip
+docker-images/climat-risk-api-frontend.tar
+docker-images/geoda_dev_db.tar
