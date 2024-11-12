@@ -1,0 +1,64 @@
+
+# ---------------------------
+# restoring container from tar image
+# ---------------------------
+
+# remove all containers
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+
+# remove all images
+docker rmi $(docker images -q)
+
+# remove all volumes
+docker volume rm $(docker volume ls -q)
+
+
+# import docker image on localhost
+
+docker load --input climat-risk-api-backend.tar
+docker load --input climat-risk-api-frontend.tar
+docker load --input geoda_dev_db.tar
+
+# verify import
+docker images
+
+
+# start the container
+docker-compose up
+
+
+# connect to database inside the container (dbeaver)
+host: localhost
+port: 5432
+user: postgres
+pass: postgres
+
+# stop frontend to run frontend independently for dev purposes (npm run dev)
+docker-compose down frontend
+
+
+
+# ---------------------------
+# build service based on docker-compose.yaml
+# ---------------------------
+
+docker-compose build --no-cache # frontend service is build based on built frontend version in dist
+
+
+#------------------------
+# sharing images
+# -----------------------
+
+
+# list containers including stopped ones
+docker ps -a
+
+# run all services
+docker-compose up
+
+# commit running container
+docker commit container_id new_image_name:tag
+
+# save image
+docker save --output image1.tar new_image_name:tag

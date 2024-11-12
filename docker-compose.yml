@@ -3,16 +3,17 @@ version: '3.9'
 services:
   db:
     image: postgres:13-alpine
-    container_name: climat-risk-api_postgres_db
+    container_name: GEODA_dev_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=GEODA
+      - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5432:5432"
-  app:
+      - "5432:5432"  # Map external port 5432 to internal port 5433
+
+  backend:
     build:
       context: .
       args:
@@ -22,16 +23,18 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "python manage.py wait_for_db &&
+             python manage.py init_db &&
+             python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db
-      - DB_NAME=GEODA
+      - DB_NAME=geoda_dev
       - DB_USER=postgres
       - DB_PASS=postgres
-      - DB_PORT=5432
+      - DB_PORT=5432  # Use the internal port 5432
     depends_on:
-    - db
+      - db
 
   frontend:
     build:
@@ -39,6 +42,14 @@ services:
     ports:
       - "3000:80"  # Map port 80 in the container to port 3000 on the host
 
+  # psql:
+  #   image: postgres:13-alpine
+  #   command: >
+  #     sh -c "PGPASSWORD=postgres psql -h host.docker.internal -U postgres -p 5433 -c \"\\l\""
+  #   environment:
+  #     - PGPASSWORD=postgres
+  #   depends_on:
+  #     - db
 
 volumes:
   postgres_data:
