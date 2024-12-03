@@ -1,0 +1,14 @@
+#lowerPanel {
+    position: absolute;
+    right: 21vw;
+    bottom: 20px;
+    display: flex;
+    gap: 20px;
+    
+    div {
+        background: var(--main-bg-color);
+        height: 110px;
+        width: 150px;
+        border-radius: 5px;
+    }
+}

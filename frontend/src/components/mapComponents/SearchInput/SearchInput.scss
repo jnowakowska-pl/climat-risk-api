@@ -1,0 +1,19 @@
+#mapInput {
+    position: absolute;
+    top: 50px;
+    left: 150px;
+
+    input {
+        background: var(--main-bg-color);
+        color: white;
+        height: 40px;
+        width: 269px;
+        border: none;
+        padding-left: 15px;
+
+        &::placeholder {
+            color: rgb(140, 140, 140);
+        }
+    }
+}
+
